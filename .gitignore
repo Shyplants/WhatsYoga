@@ -1,0 +1,38 @@
+# Ignore all intermediate files and folders
+Intermediate/
+Saved/
+DerivedDataCache/
+
+!Saved/Config.txt
+
+# Ignore binary files
+Binaries/
+
+.vs/
+
+# Ignore user-specific files
+*.log
+*.temp
+*.ini
+*.suo
+*.user
+*.userprefs
+*.vcxproj
+*.opensdf
+*.sdf
+
+# Ignore build files
+Build/
+
+# Ignore config files
+Config/DefaultEditor.ini
+Config/DefaultEditorSettings.ini
+Config/DefaultEngine.ini
+Config/DefaultGame.ini
+Config/DefaultInput.ini
+Config/DefaultScalability.ini
+Config/DefaultEditorPerProjectUserSettings.ini
+
+# Ignore other OS-specific files
+.DS_Store
+Thumbs.db
