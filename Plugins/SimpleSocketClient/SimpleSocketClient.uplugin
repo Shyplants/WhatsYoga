@@ -1,0 +1,16 @@
+{
+	"FileVersion" : 3,
+	"Version" : 1,
+	"VersionName" : "1.0",
+	"FriendlyName" : "SimpleSocketClient",
+	"Modules" : [
+		{
+			"Name" : "SocketClient",
+			"Type" : "Runtime",
+			"LoadingPhase" : "PreLoadingScreen",
+			"PlatformAllowList": [
+				"Win64"
+			]
+		}
+	]
+}

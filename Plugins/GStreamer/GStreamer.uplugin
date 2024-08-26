@@ -1,0 +1,21 @@
+{
+  "FileVersion": 3,
+  "Version": 1,
+  "VersionName": "1.0",
+  "FriendlyName": "GStreamer",
+  "Description": "",
+  "CreatedBy": "",
+  "CreatedByURL": "",
+  "DocsURL": "",
+  "Category": "Media",
+  "EngineVersion": "5.2.0",
+  "CanContainContent": true,
+  "Modules": [
+    {
+      "Name": "GStreamer",
+      "Type": "Runtime",
+      "LoadingPhase": "PreDefault",
+      "WhitelistPlatforms": [ "Win64" ]
+    }
+  ]
+}
