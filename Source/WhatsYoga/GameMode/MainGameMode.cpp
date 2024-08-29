@@ -1,5 +1,29 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+#include "MainGameMode.h"
+#include "GameInstance/WYGameInstance.h"
+#include "HUD/MainHUD.h"
 
+AMainGameMode::AMainGameMode()
+{
 
-#include "GameMode/MainGameMode.h"
+}
 
+void AMainGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+	if (PlayerController)
+	{
+		MainHUD = CastChecked<AMainHUD>(PlayerController->GetHUD());
+
+		MainHUD->AddYogaInfoWidget();
+	}
+}
+
+void AMainGameMode::RegisterGstTexture(UTexture2D* InTexture)
+{
+	if (OnGstTextureCreated.IsBound())
+	{
+		OnGstTextureCreated.Execute(InTexture);
+	}
+}
