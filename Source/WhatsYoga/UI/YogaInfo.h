@@ -20,6 +20,8 @@ public:
 
 	UFUNCTION()
 	void SetCountdownText(const FString& InText);
+
+	void SetCountdownVisible(bool bVisible);
 	
 protected:
 	UPROPERTY(meta = (BindWidget))

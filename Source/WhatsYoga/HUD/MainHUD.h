@@ -15,6 +15,8 @@ class WHATSYOGA_API AMainHUD : public AHUD
 public:
 	void AddYogaInfoWidget();
 
+	class UYogaInfo* GetYogaInfo() { return YogaInfo; }
+
 private:
 	UPROPERTY(EditAnywhere, Category = "WidgetClass")
 	TSubclassOf<class UUserWidget> YogaInfoClass;

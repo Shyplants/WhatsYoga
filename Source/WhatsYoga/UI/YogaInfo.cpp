@@ -22,3 +22,11 @@ void UYogaInfo::SetCountdownText(const FString& InText)
 		CountDownTextBlock->SetText(FText::FromString(InText));
 	}
 }
+
+void UYogaInfo::SetCountdownVisible(bool bVisible)
+{
+	if (CountDownTextBlock)
+	{
+		CountDownTextBlock->SetVisibility(bVisible ? ESlateVisibility::Visible : ESlateVisibility::Hidden);
+	}
+}
