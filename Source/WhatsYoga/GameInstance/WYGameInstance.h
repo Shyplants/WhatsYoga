@@ -20,6 +20,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "TCPConnect"))
 	void TCPConnect();
 
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "TCPSend"))
+	void TCPSendMessage(const FString& Message);
+
 protected:
 	TMap<FString, FString> ConfigOptionsMap;
 

@@ -4,7 +4,7 @@
 #include "Serialization/JsonWriter.h"
 #include "Serialization/JsonSerializer.h"
 
-FString UJsonHelper::CreateEventJson(const FString& eventType)
+FString JsonHelper::CreateEventJson(const FString& eventType)
 {
 	TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject());
 
@@ -20,7 +20,7 @@ FString UJsonHelper::CreateEventJson(const FString& eventType)
 	return OutputString;
 }
 
-void UJsonHelper::ParseEventJson(const FString& JsonString)
+void JsonHelper::ParseEventJson(const FString& JsonString)
 {
 	TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(JsonString);
 
@@ -33,7 +33,7 @@ void UJsonHelper::ParseEventJson(const FString& JsonString)
 
 		if (JsonObject->TryGetStringField(TEXT("event"), EventType) &&
 			JsonObject->TryGetNumberField(TEXT("value"), Value) &&
-			JsonObject->TryGetStringField(TEXT("event"), Timestamp))
+			JsonObject->TryGetStringField(TEXT("timestamp"), Timestamp))
 		{
 			UE_LOG(LogTemp, Log, TEXT("Event: %s"), *EventType);
 			UE_LOG(LogTemp, Log, TEXT("Value: %f"), Value);

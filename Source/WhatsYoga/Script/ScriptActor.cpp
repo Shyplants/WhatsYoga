@@ -2,7 +2,13 @@
 #include "Kismet/GameplayStatics.h"
 #include "HUD/MainHUD.h"
 #include "UI/YogaInfo.h"
-
+#include "Helper/JsonHelper.h"
+#include "GameInstance/WYGameInstance.h"
+// #include "LevelSequence.h"
+#include "LevelSequenceActor.h"
+#include "LevelSequencePlayer.h"
+#include "MovieScene.h"
+#include "Tracks/MovieSceneSkeletalAnimationTrack.h"
 
 AScriptActor::AScriptActor()
 {
@@ -20,6 +26,23 @@ void AScriptActor::BeginPlay()
 	{
 		MainHUD = CastChecked<AMainHUD>(PlayerController->GetHUD());
 	}
+
+	TArray<AActor*> SequenceActor;
+	UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), ALevelSequenceActor::StaticClass(), FName("Yoga"), SequenceActor);
+	if (SequenceActor.IsValidIndex(0))
+	{
+		ALevelSequenceActor* LevelSequenceActor = Cast<ALevelSequenceActor>(SequenceActor[0]);
+		if (LevelSequenceActor)
+		{
+			YogaSequencePlayer = LevelSequenceActor->GetSequencePlayer();
+			if (YogaSequencePlayer)
+			{
+				// delegate OnYogaSequenceFinished
+			}
+		}
+	}
+
+	PlayYogaSequence();
 }
 
 void AScriptActor::Tick(float DeltaTime)
@@ -81,5 +104,18 @@ void AScriptActor::SetCountdownText(const FString& Text)
 	}
 
 	YogaInfo->SetCountdownText(Text);
+}
+
+void AScriptActor::PlayYogaSequence()
+{
+	FString JsonData = JsonHelper::CreateEventJson(TEXT("start"));
+
+	UWYGameInstance* WYGameInstance = CastChecked<UWYGameInstance>(GetGameInstance());
+	WYGameInstance->TCPSendMessage(JsonData);
+
+	if (YogaSequencePlayer)
+	{
+	}
+	YogaSequencePlayer->Play();
 }
 

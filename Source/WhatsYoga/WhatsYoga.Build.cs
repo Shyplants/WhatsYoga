@@ -10,7 +10,7 @@ public class WhatsYoga : ModuleRules
 
         PublicIncludePaths.AddRange(new string[] { "WhatsYoga" });
 
-        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "Json", "JsonUtilities" });
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "Json", "JsonUtilities", "LevelSequence", "MovieScene", "UMG", "MovieSceneTracks" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
 
