@@ -47,7 +47,8 @@ private:
 	void ClearYogaTextBlock();
 	void ShowYogaTextBlock(const FString& Text);
 	void SetCountdownText(const FString& Text);
-	void PlayYogaSequence();
+
+	void PlaySelectedAnimation(int32 AnimationIndex);
 
 private:
 
@@ -61,10 +62,14 @@ private:
 	TObjectPtr<class ULevelSequencePlayer> YogaSequencePlayer;
 
 	UPROPERTY()
+	TObjectPtr<class ULevelSequence> YogaSequence;
+
+	UPROPERTY()
 	TObjectPtr<class UMovieScene> YogaMovieScene;
 	
 	UPROPERTY()
-	TArray<TObjectPtr<class UMovieSceneSkeletalAnimationTrack>> YogaAnimationTracks;
+	TArray<TObjectPtr<class UMovieSceneSkeletalAnimationSection>> YogaAnimationSections;
+	
 
 private:
 	float AccumulatedTime;

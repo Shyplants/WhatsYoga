@@ -4,11 +4,14 @@
 #include "UI/YogaInfo.h"
 #include "Helper/JsonHelper.h"
 #include "GameInstance/WYGameInstance.h"
-// #include "LevelSequence.h"
+#include "LevelSequence.h"
 #include "LevelSequenceActor.h"
 #include "LevelSequencePlayer.h"
 #include "MovieScene.h"
+#include "MovieSceneTrack.h"
+#include "MovieSceneSection.h"
 #include "Tracks/MovieSceneSkeletalAnimationTrack.h"
+#include "Sections/MovieSceneSkeletalAnimationSection.h"
 
 AScriptActor::AScriptActor()
 {
@@ -35,14 +38,28 @@ void AScriptActor::BeginPlay()
 		if (LevelSequenceActor)
 		{
 			YogaSequencePlayer = LevelSequenceActor->GetSequencePlayer();
-			if (YogaSequencePlayer)
+			// check(YogaSequencePlayer != nullptr);
+
+			YogaSequence = LevelSequenceActor->GetSequence();
+			check(YogaSequence != nullptr);
+
+			YogaMovieScene = YogaSequence->GetMovieScene();
+		}
+	}
+
+	for (UMovieSceneTrack* Track : YogaMovieScene->GetBindings()[0].GetTracks())
+	{
+		if (UMovieSceneSkeletalAnimationTrack* AnimTrack = Cast<UMovieSceneSkeletalAnimationTrack>(Track))
+		{
+			int SectionIndex = 0;
+			for (UMovieSceneSection* Section : AnimTrack->GetAllSections())
 			{
-				// delegate OnYogaSequenceFinished
+				YogaAnimationSections.Add(Cast<UMovieSceneSkeletalAnimationSection>(Section));
 			}
 		}
 	}
 
-	PlayYogaSequence();
+	PlaySelectedAnimation(1);
 }
 
 void AScriptActor::Tick(float DeltaTime)
@@ -106,16 +123,28 @@ void AScriptActor::SetCountdownText(const FString& Text)
 	YogaInfo->SetCountdownText(Text);
 }
 
-void AScriptActor::PlayYogaSequence()
+void AScriptActor::PlaySelectedAnimation(int32 AnimationIndex)
 {
 	FString JsonData = JsonHelper::CreateEventJson(TEXT("start"));
 
 	UWYGameInstance* WYGameInstance = CastChecked<UWYGameInstance>(GetGameInstance());
 	WYGameInstance->TCPSendMessage(JsonData);
 
-	if (YogaSequencePlayer)
+	check(AnimationIndex < YogaAnimationSections.Num());
+
+	for (int32 i = 0; i < YogaAnimationSections.Num(); ++i)
 	{
+		YogaAnimationSections[i]->SetIsActive(AnimationIndex == i);
+
+		if (i == AnimationIndex)
+		{
+			FFrameNumber AnimationStartFrame = YogaAnimationSections[i]->GetInclusiveStartFrame();
+			FFrameNumber AnimationEndFrame = YogaAnimationSections[i]->GetExclusiveEndFrame();
+			YogaSequencePlayer->SetTimeRange(AnimationStartFrame.Value, AnimationEndFrame.Value);
+		}
 	}
+
+	check(YogaSequencePlayer);
 	YogaSequencePlayer->Play();
 }
 
