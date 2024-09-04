@@ -17,12 +17,13 @@ class WHATSYOGA_API AMainGameMode : public AGameMode
 public:
 	AMainGameMode();
 
-protected:
-	virtual void BeginPlay() override;
-
 	UFUNCTION()
 	void RegisterGstTexture(UTexture2D* InTexture);
 
+protected:
+	virtual void BeginPlay() override;
+
+public:
 	FOnGstTextureCreated OnGstTextureCreated;
 
 private:
