@@ -23,7 +23,7 @@ void UIntro::NativeConstruct()
 
 void UIntro::OnIntroAnimationFinished()
 {
-	UGameplayStatics::OpenLevel(GetWorld(), FName("YogaMap"));
+	OnClosed.ExecuteIfBound();
 }
 
 void UIntro::PlayIntroAnimation()

@@ -17,6 +17,17 @@ void ALobbyGameMode::BeginPlay()
 	if (PlayerController)
 	{
 		LobbyHUD = CastChecked<ALobbyHUD>(PlayerController->GetHUD());
-		LobbyHUD->AddIntro();
+		LobbyHUD->AddIntroWidget();
 	}
+}
+
+void ALobbyGameMode::LoadYogaMap()
+{
+	FTimerHandle OpenYogaMapTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(OpenYogaMapTimerHandle, this, &ALobbyGameMode::OpenYogaMap, 5.0f, false);
+}
+
+void ALobbyGameMode::OpenYogaMap()
+{
+	UGameplayStatics::OpenLevel(GetWorld(), FName("YogaMap"));
 }

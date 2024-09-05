@@ -1,15 +1,30 @@
 #include "LobbyHUD.h"
 #include "UI/Intro.h"
+#include "UI/PlayerInfo.h"
 
-void ALobbyHUD::AddIntro()
+void ALobbyHUD::AddIntroWidget()
 {
 	APlayerController* PlayerController = GetOwningPlayerController();
-	if (PlayerController && IntroClass)
+	if (PlayerController && IntroWidgetClass)
 	{
-		Intro = CreateWidget<UIntro>(PlayerController, IntroClass);
-		if (Intro)
+		IntroWidget = CreateWidget<UIntro>(PlayerController, IntroWidgetClass);
+		if (IntroWidget)
 		{
-			Intro->AddToViewport();
+			IntroWidget->AddToViewport();
+			IntroWidget->OnClosed.BindUObject(this, &ALobbyHUD::AddPlayerInfoWidget);
 		}
+	}
+}
+
+void ALobbyHUD::AddPlayerInfoWidget()
+{
+	APlayerController* PlayerController = GetOwningPlayerController();
+	if (PlayerController && PlayerInfoWidgetClass)
+	{
+		PlayerInfoWidget = CreateWidget<UPlayerInfo>(PlayerController, PlayerInfoWidgetClass);
+	}
+	if (PlayerInfoWidget)
+	{
+		PlayerInfoWidget->AddToViewport();
 	}
 }

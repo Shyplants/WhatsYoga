@@ -14,10 +14,18 @@ class WHATSYOGA_API ALobbyHUD : public AHUD
 
 public:
 	UPROPERTY(EditAnywhere, Category = "WidgetClass")
-	TSubclassOf<class UUserWidget> IntroClass;
+	TSubclassOf<class UUserWidget> IntroWidgetClass;
+
+	UPROPERTY(EditAnywhere, Category = "WidgetClass")
+	TSubclassOf<class UUserWidget> PlayerInfoWidgetClass;
+
+	void AddIntroWidget();
+	void AddPlayerInfoWidget();
+
+private:
+	UPROPERTY()
+	TObjectPtr<class UIntro> IntroWidget;
 
 	UPROPERTY()
-	TObjectPtr<class UIntro> Intro;
-	
-	void AddIntro();
+	TObjectPtr<class UPlayerInfo> PlayerInfoWidget;
 };

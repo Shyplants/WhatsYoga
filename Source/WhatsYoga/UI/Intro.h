@@ -4,6 +4,8 @@
 #include "Blueprint/UserWidget.h"
 #include "Intro.generated.h"
 
+DECLARE_DELEGATE(FIntroOnClosed)
+
 /**
  * 
  */
@@ -23,6 +25,8 @@ public:
 
 	UFUNCTION()
 	void OnIntroAnimationFinished();
+
+	FIntroOnClosed OnClosed;
 
 private:
 	void PlayIntroAnimation();
