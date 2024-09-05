@@ -19,6 +19,9 @@ public:
 	void SetYogaText(const FString& InText);
 
 	UFUNCTION()
+	void SetGaugePercent(float Percent);
+
+	UFUNCTION()
 	void SetCountdownText(const FString& InText);
 
 	void SetCountdownVisible(bool bVisible);
@@ -27,8 +30,8 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	class URichTextBlock* YogaExplanationTextBlock;
 
-	/*UPROPERTY(meta = (BindWidget))
-	class UGauge* WB_ComettailGauge;*/
+	UPROPERTY(meta = (BindWidget))
+	class UGauge* WB_ComettailGauge;
 
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* CountDownTextBlock;

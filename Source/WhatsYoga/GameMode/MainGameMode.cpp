@@ -27,3 +27,10 @@ void AMainGameMode::RegisterGstTexture(UTexture2D* InTexture)
 		OnGstTextureCreated.Execute(InTexture);
 	}
 }
+
+void AMainGameMode::SetGaugePercent(float Percent)
+{
+	check(MainHUD != nullptr);
+
+	MainHUD->SetGaugePercent(Percent);
+}

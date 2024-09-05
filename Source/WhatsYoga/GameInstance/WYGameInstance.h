@@ -17,6 +17,11 @@ public:
 
 	virtual void Init() override;
 
+// TCP Section
+public:
+	UFUNCTION(BlueprintCallable)
+	void HandleReceivedTCPMessage(FString Message);
+
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "TCPConnect"))
 	void TCPConnect();
 
@@ -31,4 +36,7 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "TCP/IP")
 	int32 Port;
+
+private:
+	void SetGaugePercent(float Percent);
 };

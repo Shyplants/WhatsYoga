@@ -20,6 +20,10 @@ public:
 	UFUNCTION()
 	void RegisterGstTexture(UTexture2D* InTexture);
 
+public:
+	UFUNCTION()
+	void SetGaugePercent(float Percent);
+
 protected:
 	virtual void BeginPlay() override;
 

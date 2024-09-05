@@ -17,6 +17,9 @@ public:
 
 	class UYogaInfo* GetYogaInfo() { return YogaInfo; }
 
+public:
+	void SetGaugePercent(float Percent);
+
 private:
 	UPROPERTY(EditAnywhere, Category = "WidgetClass")
 	TSubclassOf<class UUserWidget> YogaInfoClass;

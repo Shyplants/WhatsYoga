@@ -14,3 +14,10 @@ void AMainHUD::AddYogaInfoWidget()
 		}
 	}
 }
+
+void AMainHUD::SetGaugePercent(float Percent)
+{
+	check(YogaInfo != nullptr);
+
+	YogaInfo->SetGaugePercent(Percent);
+}

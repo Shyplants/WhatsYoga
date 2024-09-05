@@ -1,7 +1,11 @@
 #include "WYGameInstance.h"
+#include "GameMode/MainGameMode.h"
+#include "Kismet/GameplayStatics.h"
 #include "Dom/JsonObject.h"
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonSerializer.h"
+#include "Misc/FileHelper.h"
+#include "Misc/Paths.h"
 
 UWYGameInstance::UWYGameInstance()
 {
@@ -44,4 +48,50 @@ void UWYGameInstance::Init()
 	}
 
 	TCPConnect();
+}
+
+void UWYGameInstance::HandleReceivedTCPMessage(FString Message)
+{
+	TSharedPtr<FJsonObject> JsonObject;
+	TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(Message);
+	if (FJsonSerializer::Deserialize(Reader, JsonObject) && JsonObject.IsValid())
+	{
+		FString Event;
+		FString Content;
+		FString Score;
+		FString Timestamp;
+
+		float ScoreValue;
+
+		if (JsonObject->TryGetStringField(TEXT("event"), Event) &&
+			JsonObject->TryGetStringField(TEXT("content"), Content) &&
+			JsonObject->TryGetStringField(TEXT("timestamp"), Timestamp))
+		{
+			if (Event == TEXT("start"))
+			{
+
+			}
+
+			else if (Event == TEXT("work"))
+			{
+				if (JsonObject->TryGetNumberField(TEXT("score"), ScoreValue))
+				{
+					SetGaugePercent(ScoreValue);
+				}
+			}
+
+			else if (Event == TEXT("end"))
+			{
+
+			}
+		}
+	}
+}
+
+void UWYGameInstance::SetGaugePercent(float Percent)
+{
+	check(Percent >= 0.0f && Percent <= 100.0f);
+
+	AMainGameMode* MainGameMode = CastChecked<AMainGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	MainGameMode->SetGaugePercent(Percent);
 }
