@@ -6,6 +6,8 @@
 #include "Serialization/JsonSerializer.h"
 #include "Misc/FileHelper.h"
 #include "Misc/Paths.h"
+#include "Sockets.h"
+#include "SocketSubsystem.h"
 
 UWYGameInstance::UWYGameInstance()
 {
@@ -86,6 +88,14 @@ void UWYGameInstance::HandleReceivedTCPMessage(FString Message)
 			}
 		}
 	}
+}
+
+FString UWYGameInstance::GetLocalIPAddress()
+{
+	bool bCanBind;
+	TSharedRef<FInternetAddr> LocalIP = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->GetLocalHostAddr(*GLog, bCanBind);
+
+	return LocalIP->ToString(false);
 }
 
 void UWYGameInstance::SetGaugePercent(float Percent)

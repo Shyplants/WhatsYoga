@@ -27,6 +27,9 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "TCPSend"))
 	void TCPSendMessage(const FString& Message);
+	
+	UFUNCTION(BlueprintCallable)
+	FString GetLocalIPAddress();
 
 protected:
 	TMap<FString, FString> ConfigOptionsMap;

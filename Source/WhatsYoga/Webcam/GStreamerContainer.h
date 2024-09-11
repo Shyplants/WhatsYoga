@@ -16,8 +16,8 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	virtual void Tick(float DeltaTime) override;
 	virtual void PostInitializeComponents() override;
+
 
 	UFUNCTION(BlueprintCallable, Category = "Texture")
 	void SetWebcamTexture(UTexture2D* InTexture);
@@ -25,5 +25,9 @@ public:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Texture")
 	UTexture2D* WebcamTexture;
+
+private:
+	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	FString GStreamerPipelineConfig;
 
 };

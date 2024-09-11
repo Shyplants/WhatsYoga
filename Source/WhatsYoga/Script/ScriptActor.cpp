@@ -127,9 +127,6 @@ void AScriptActor::PlaySelectedAnimation(int32 AnimationIndex)
 {
 	FString JsonData = JsonHelper::CreateEventJson(TEXT("start"));
 
-	UWYGameInstance* WYGameInstance = CastChecked<UWYGameInstance>(GetGameInstance());
-	WYGameInstance->TCPSendMessage(JsonData);
-
 	check(AnimationIndex < YogaAnimationSections.Num());
 
 	for (int32 i = 0; i < YogaAnimationSections.Num(); ++i)
@@ -143,6 +140,9 @@ void AScriptActor::PlaySelectedAnimation(int32 AnimationIndex)
 			YogaSequencePlayer->SetTimeRange(AnimationStartFrame.Value, AnimationEndFrame.Value);
 		}
 	}
+
+	UWYGameInstance* WYGameInstance = CastChecked<UWYGameInstance>(GetGameInstance());
+	WYGameInstance->TCPSendMessage(JsonData);
 
 	check(YogaSequencePlayer);
 	YogaSequencePlayer->Play();

@@ -4,25 +4,23 @@
 
 AGStreamerContainer::AGStreamerContainer()
 {
-	PrimaryActorTick.bCanEverTick = true;
-
+	PrimaryActorTick.bCanEverTick = false;
 }
 
 void AGStreamerContainer::BeginPlay()
 {
 	Super::BeginPlay();
-	
-}
-
-void AGStreamerContainer::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 
 void AGStreamerContainer::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+
+	
+	/*FString IpAddress = GetLocalIPAddress();
+
+	GStreamerPipelineConfig = FString::Printf(TEXT("rtspsrc location=rtsp://%s:8562//test latency=100 name=source ! rtph264depay name=depayloader ! avdec_h264 name=decoder ! videoconvert name=convert ! video/x-raw,format=(string)RGBA ! videoconvert ! appsink name=sink"), *IpAddress);
+	UE_LOG(LogTemp, Warning, TEXT("GStreamer Pipeline Config: %s"), *GStreamerPipelineConfig);*/
 }
 
 void AGStreamerContainer::SetWebcamTexture(UTexture2D* InTexture)
