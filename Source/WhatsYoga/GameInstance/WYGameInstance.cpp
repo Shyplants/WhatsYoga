@@ -63,7 +63,8 @@ void UWYGameInstance::HandleReceivedTCPMessage(FString Message)
 		FString Score;
 		FString Timestamp;
 
-		float ScoreValue;
+		FString stringValue;
+		float floatValue;
 
 		if (JsonObject->TryGetStringField(TEXT("event"), Event) &&
 			JsonObject->TryGetStringField(TEXT("content"), Content) &&
@@ -76,14 +77,29 @@ void UWYGameInstance::HandleReceivedTCPMessage(FString Message)
 
 			else if (Event == TEXT("work"))
 			{
-				if (JsonObject->TryGetNumberField(TEXT("score"), ScoreValue))
+				if (JsonObject->TryGetNumberField(TEXT("score"), floatValue))
 				{
-					SetGaugePercent(ScoreValue);
+					SetGaugePercent(floatValue);
 				}
 			}
 
 			else if (Event == TEXT("end"))
 			{
+
+			}
+
+			else if (Event == TEXT("player_info"))
+			{
+				if (JsonObject->TryGetStringField(TEXT("player_name"), stringValue))
+				{
+					UE_LOG(LogTemp, Log, TEXT("Name received : %s"), *stringValue);
+					SetPlayerName(stringValue);
+				}
+
+				if (JsonObject->TryGetStringField(TEXT("content"), stringValue))
+				{
+					SetContentName(stringValue);
+				}
 
 			}
 		}

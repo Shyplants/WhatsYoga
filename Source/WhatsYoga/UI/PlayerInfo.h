@@ -24,4 +24,7 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget), Transient)
 	TObjectPtr<class UEditableTextBox> PlayerGenderTextBox;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget), Transient)
+	TObjectPtr<class UEditableTextBox> YogaContentTextBox;
 };

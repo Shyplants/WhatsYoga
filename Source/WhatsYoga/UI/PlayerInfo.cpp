@@ -14,7 +14,8 @@ void UPlayerInfo::NativeConstruct()
 void UPlayerInfo::LoadPlayerInfo()
 {
 	UWYGameInstance* WYGameInstance = CastChecked<UWYGameInstance>(GetGameInstance());
-	PlayerNameTextBox->SetText(FText::FromString(WYGameInstance->GetName()));
+	PlayerNameTextBox->SetText(FText::FromString(WYGameInstance->GetPlayerName()));
+	YogaContentTextBox->SetText(FText::FromString(WYGameInstance->GetContentName()));
 }
 
 void UPlayerInfo::LoadYogaMap()

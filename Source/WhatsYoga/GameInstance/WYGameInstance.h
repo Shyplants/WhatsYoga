@@ -4,6 +4,8 @@
 #include "Engine/GameInstance.h"
 #include "WYGameInstance.generated.h"
 
+DECLARE_DELEGATE_OneParam(FOnNameReceivedDelegate, const FString&);
+
 /**
  * 
  */
@@ -42,4 +44,17 @@ protected:
 
 private:
 	void SetGaugePercent(float Percent);
+
+// Player Section
+public:
+	FOnNameReceivedDelegate OnNameReceived;
+	FORCEINLINE void SetPlayerName(const FString& InPlayerName) { PlayerName = InPlayerName; OnNameReceived.ExecuteIfBound(InPlayerName); }
+	FORCEINLINE FString GetPlayerName() const { return PlayerName; }
+
+	FORCEINLINE void SetContentName(const FString& InContentName) { ContentName = InContentName; }
+	FORCEINLINE FString GetContentName() const { return ContentName; }
+
+private:
+	FString PlayerName;
+	FString ContentName;
 };
