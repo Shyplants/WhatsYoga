@@ -18,6 +18,7 @@ AScriptActor::AScriptActor()
 	PrimaryActorTick.bCanEverTick = true;
 	AccumulatedTime = 0.0f;
 	LastProcessedEventIndex = -1;
+	ContentIndex = 0;
 }
 
 void AScriptActor::BeginPlay()
@@ -59,7 +60,19 @@ void AScriptActor::BeginPlay()
 		}
 	}
 
-	PlaySelectedAnimation(1);
+	TObjectPtr<UWYGameInstance> WYGameInstance = CastChecked<UWYGameInstance>(GetGameInstance());
+	ContentIndex = WYGameInstance->GetContentIndex();
+
+	if (TextEventArray.IsValidIndex(ContentIndex))
+	{
+		TextEvents = TextEventArray[ContentIndex].InnerArray;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ContentIndex is unvalid"));
+	}
+	
+	PlaySelectedAnimation(ContentIndex);
 }
 
 void AScriptActor::Tick(float DeltaTime)
@@ -88,6 +101,14 @@ void AScriptActor::Tick(float DeltaTime)
 		{
 			SetCountdownText(FString::Printf(TEXT("%d"), static_cast<int32>(Event.ClearTime - AccumulatedTime)));
 		}
+	}
+}
+
+void AScriptActor::SetContentIndex(int32 InContentInedx)
+{
+	if (TextEventArray.IsValidIndex(InContentInedx))
+	{
+		ContentIndex = InContentInedx;
 	}
 }
 
@@ -141,7 +162,7 @@ void AScriptActor::PlaySelectedAnimation(int32 AnimationIndex)
 		}
 	}
 
-	UWYGameInstance* WYGameInstance = CastChecked<UWYGameInstance>(GetGameInstance());
+	TObjectPtr<UWYGameInstance> WYGameInstance = CastChecked<UWYGameInstance>(GetGameInstance());
 	WYGameInstance->TCPSendMessage(JsonData);
 
 	check(YogaSequencePlayer);

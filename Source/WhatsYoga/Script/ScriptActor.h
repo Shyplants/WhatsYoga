@@ -29,6 +29,17 @@ struct FTextEvent
 	bool bIsActive;
 };
 
+USTRUCT()
+struct FTextEventArray
+{
+	GENERATED_BODY()
+
+	FTextEventArray() {}
+
+	UPROPERTY(EditAnywhere, Category="Text Events")
+	TArray<FTextEvent> InnerArray;
+};
+
 UCLASS()
 class WHATSYOGA_API AScriptActor : public AActor
 {
@@ -42,6 +53,10 @@ protected:
 
 public:	
 	virtual void Tick(float DeltaTime) override;
+
+public:
+	UFUNCTION()
+	void SetContentIndex(int32 InContentInedx);
 
 private:
 	void ClearYogaTextBlock();
@@ -74,10 +89,14 @@ private:
 private:
 	float AccumulatedTime;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Text Events")
+	TArray<FTextEventArray> TextEventArray;
+
+	UPROPERTY()
 	TArray<FTextEvent> TextEvents;
 	
 	int32 LastProcessedEventIndex;
+	int32 ContentIndex;
 
 private:
 	TObjectPtr<class AMainHUD> MainHUD;

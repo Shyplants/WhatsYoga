@@ -5,6 +5,7 @@
 #include "WYGameInstance.generated.h"
 
 DECLARE_DELEGATE_OneParam(FOnNameReceivedDelegate, const FString&);
+DECLARE_DELEGATE_OneParam(FOnContentIndexReceivedDelegate, const int32);
 
 /**
  * 
@@ -51,10 +52,14 @@ public:
 	FORCEINLINE void SetPlayerName(const FString& InPlayerName) { PlayerName = InPlayerName; OnNameReceived.ExecuteIfBound(InPlayerName); }
 	FORCEINLINE FString GetPlayerName() const { return PlayerName; }
 
+	void SetContentIndex();
+	FORCEINLINE int32 GetContentIndex() const { return ContentIndex; }
+
 	FORCEINLINE void SetContentName(const FString& InContentName) { ContentName = InContentName; }
 	FORCEINLINE FString GetContentName() const { return ContentName; }
 
 private:
 	FString PlayerName;
 	FString ContentName;
+	int32 ContentIndex;
 };

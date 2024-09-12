@@ -11,6 +11,7 @@
 
 UWYGameInstance::UWYGameInstance()
 {
+	ContentIndex = 0;
 }
 
 void UWYGameInstance::Init()
@@ -99,6 +100,7 @@ void UWYGameInstance::HandleReceivedTCPMessage(FString Message)
 				if (JsonObject->TryGetStringField(TEXT("content"), stringValue))
 				{
 					SetContentName(stringValue);
+					SetContentIndex();
 				}
 
 			}
@@ -120,4 +122,18 @@ void UWYGameInstance::SetGaugePercent(float Percent)
 
 	AMainGameMode* MainGameMode = CastChecked<AMainGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 	MainGameMode->SetGaugePercent(Percent);
+}
+
+void UWYGameInstance::SetContentIndex()
+{
+	TArray<FString> ContentNames = { TEXT("lower_body") , TEXT("upper_body") , TEXT("body") };
+
+	for (int32 i = 0; i < ContentNames.Num(); ++i)
+	{
+		if (!ContentName.Compare(ContentNames[i]))
+		{
+			ContentIndex = i;
+			break;
+		}
+	}
 }
