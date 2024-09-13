@@ -10,6 +10,8 @@
 #include "MovieScene.h"
 #include "MovieSceneTrack.h"
 #include "MovieSceneSection.h"
+#include "MovieSceneSequencePlayer.h"
+#include "MovieSceneSequence.h"
 #include "Tracks/MovieSceneSkeletalAnimationTrack.h"
 #include "Sections/MovieSceneSkeletalAnimationSection.h"
 
@@ -31,34 +33,6 @@ void AScriptActor::BeginPlay()
 		MainHUD = CastChecked<AMainHUD>(PlayerController->GetHUD());
 	}
 
-	TArray<AActor*> SequenceActor;
-	UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), ALevelSequenceActor::StaticClass(), FName("Yoga"), SequenceActor);
-	if (SequenceActor.IsValidIndex(0))
-	{
-		ALevelSequenceActor* LevelSequenceActor = Cast<ALevelSequenceActor>(SequenceActor[0]);
-		if (LevelSequenceActor)
-		{
-			YogaSequencePlayer = LevelSequenceActor->GetSequencePlayer();
-			// check(YogaSequencePlayer != nullptr);
-
-			YogaSequence = LevelSequenceActor->GetSequence();
-			check(YogaSequence != nullptr);
-
-			YogaMovieScene = YogaSequence->GetMovieScene();
-		}
-	}
-
-	for (UMovieSceneTrack* Track : YogaMovieScene->GetBindings()[0].GetTracks())
-	{
-		if (UMovieSceneSkeletalAnimationTrack* AnimTrack = Cast<UMovieSceneSkeletalAnimationTrack>(Track))
-		{
-			int SectionIndex = 0;
-			for (UMovieSceneSection* Section : AnimTrack->GetAllSections())
-			{
-				YogaAnimationSections.Add(Cast<UMovieSceneSkeletalAnimationSection>(Section));
-			}
-		}
-	}
 
 	TObjectPtr<UWYGameInstance> WYGameInstance = CastChecked<UWYGameInstance>(GetGameInstance());
 	ContentIndex = WYGameInstance->GetContentIndex();
@@ -148,24 +122,21 @@ void AScriptActor::PlaySelectedAnimation(int32 AnimationIndex)
 {
 	FString JsonData = JsonHelper::CreateEventJson(TEXT("start"));
 
-	check(AnimationIndex < YogaAnimationSections.Num());
+	ULevelSequence* SelectedSequence = YogaAnimationSequences[AnimationIndex];
+	
+	FMovieSceneSequencePlaybackSettings PlaybackSettings;
+	ALevelSequenceActor* OutActor = nullptr;
 
-	for (int32 i = 0; i < YogaAnimationSections.Num(); ++i)
-	{
-		YogaAnimationSections[i]->SetIsActive(AnimationIndex == i);
+	ULevelSequencePlayer* SequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer(
+		GetWorld(),
+		SelectedSequence,
+		PlaybackSettings,
+		OutActor
+	);
 
-		if (i == AnimationIndex)
-		{
-			FFrameNumber AnimationStartFrame = YogaAnimationSections[i]->GetInclusiveStartFrame();
-			FFrameNumber AnimationEndFrame = YogaAnimationSections[i]->GetExclusiveEndFrame();
-			YogaSequencePlayer->SetTimeRange(AnimationStartFrame.Value, AnimationEndFrame.Value);
-		}
-	}
+	SequencePlayer->Play();
 
 	TObjectPtr<UWYGameInstance> WYGameInstance = CastChecked<UWYGameInstance>(GetGameInstance());
 	WYGameInstance->TCPSendMessage(JsonData);
-
-	check(YogaSequencePlayer);
-	YogaSequencePlayer->Play();
 }
 

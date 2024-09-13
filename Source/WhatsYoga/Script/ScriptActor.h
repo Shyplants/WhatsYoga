@@ -67,24 +67,8 @@ private:
 
 private:
 
-	/*UPROPERTY(EditAnywhere)
-	TObjectPtr<class ULevelSequence> YogaSequence;
-
-	UPROPERTY()
-	TObjectPtr<class ALevelSequenceActor> YogaSequenceActor;*/
-
-	UPROPERTY()
-	TObjectPtr<class ULevelSequencePlayer> YogaSequencePlayer;
-
-	UPROPERTY()
-	TObjectPtr<class ULevelSequence> YogaSequence;
-
-	UPROPERTY()
-	TObjectPtr<class UMovieScene> YogaMovieScene;
-	
-	UPROPERTY()
-	TArray<TObjectPtr<class UMovieSceneSkeletalAnimationSection>> YogaAnimationSections;
-	
+	UPROPERTY(EditAnywhere, Category = "Sequencer")
+	TArray<TObjectPtr<class ULevelSequence>> YogaAnimationSequences;
 
 private:
 	float AccumulatedTime;

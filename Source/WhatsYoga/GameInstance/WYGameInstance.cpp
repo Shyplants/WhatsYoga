@@ -126,7 +126,7 @@ void UWYGameInstance::SetGaugePercent(float Percent)
 
 void UWYGameInstance::SetContentIndex()
 {
-	TArray<FString> ContentNames = { TEXT("lower_body") , TEXT("upper_body") , TEXT("body") };
+	TArray<FString> ContentNames = { TEXT("upper_body") , TEXT("lower_body"), TEXT("body") };
 
 	for (int32 i = 0; i < ContentNames.Num(); ++i)
 	{
