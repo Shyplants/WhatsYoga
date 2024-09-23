@@ -19,7 +19,8 @@ AScriptActor::AScriptActor()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	AccumulatedTime = 0.0f;
-	LastProcessedEventIndex = -1;
+	LastProcessedTextEventIndex = -1;
+	LastProcessedScoreEventIndex = -1;
 	ContentIndex = 0;
 }
 
@@ -45,8 +46,19 @@ void AScriptActor::BeginPlay()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("ContentIndex is unvalid"));
 	}
+
+	if (ScoreEventArray.IsValidIndex(ContentIndex))
+	{
+		ScoreEvents = ScoreEventArray[ContentIndex].InnerArray;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ContentIndex is unvalid"));
+	}
 	
 	PlaySelectedAnimation(ContentIndex);
+
+	ClearCountdownTextBlock();
 }
 
 void AScriptActor::Tick(float DeltaTime)
@@ -54,27 +66,52 @@ void AScriptActor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	AccumulatedTime += DeltaTime;
-	if (LastProcessedEventIndex + 1 < TextEvents.Num())
+	
+	if (LastProcessedTextEventIndex + 1 < TextEvents.Num())
 	{
-		FTextEvent& Event = TextEvents[LastProcessedEventIndex + 1];
+		FTextEvent& Event = TextEvents[LastProcessedTextEventIndex + 1];
 		if (!Event.bIsActive)
 		{
 			if (AccumulatedTime >= Event.TriggerTime)
 			{
 				Event.bIsActive = true;
 				ShowYogaTextBlock(Event.Text);
-				SetCountdownText(FString::Printf(TEXT("%d"), static_cast<int32>(Event.ClearTime - AccumulatedTime)));
+				// SetCountdownText(FString::Printf(TEXT("%d"), static_cast<int32>(Event.ClearTime - AccumulatedTime)));
 			}
 		}
 		else if (AccumulatedTime >= Event.ClearTime)
 		{
 			ClearYogaTextBlock();
-			LastProcessedEventIndex++;
+			LastProcessedTextEventIndex++;
 		}
 		else
 		{
-			SetCountdownText(FString::Printf(TEXT("%d"), static_cast<int32>(Event.ClearTime - AccumulatedTime)));
+			// SetCountdownText(FString::Printf(TEXT("%d"), static_cast<int32>(Event.ClearTime - AccumulatedTime)));
 		}
+	}
+
+	if (LastProcessedScoreEventIndex + 1 < ScoreEvents.Num())
+	{
+		FScoreEvent& Event = ScoreEvents[LastProcessedScoreEventIndex + 1];
+		if (!Event.bIsActive)
+		{
+			if (AccumulatedTime >= Event.TriggerTime)
+			{
+				Event.bIsActive = true;
+				YogaInfo->SetCountdownVisible(true);
+				SetCountdownTextBlock(FString::Printf(TEXT("%d"), static_cast<int32>(Event.ClearTime - AccumulatedTime)));
+			}
+		}
+		else if (AccumulatedTime >= Event.ClearTime)
+		{
+			YogaInfo->SetCountdownVisible(false);
+			LastProcessedScoreEventIndex++;
+		}
+		else
+		{
+			SetCountdownTextBlock(FString::Printf(TEXT("%d"), static_cast<int32>(Event.ClearTime - AccumulatedTime)));
+		}
+		
 	}
 }
 
@@ -94,7 +131,7 @@ void AScriptActor::ClearYogaTextBlock()
 	}
 
 	YogaInfo->SetYogaText(TEXT(""));
-	YogaInfo->SetCountdownVisible(false);
+	// YogaInfo->SetCountdownVisible(false);
 }
 
 void AScriptActor::ShowYogaTextBlock(const FString& Text)
@@ -105,16 +142,27 @@ void AScriptActor::ShowYogaTextBlock(const FString& Text)
 	}
 
 	YogaInfo->SetYogaText(Text);
-	YogaInfo->SetCountdownVisible(true);
+	// YogaInfo->SetCountdownVisible(true);
 }
 
-void AScriptActor::SetCountdownText(const FString& Text)
+void AScriptActor::ClearCountdownTextBlock()
 {
 	if (nullptr == YogaInfo)
 	{
 		YogaInfo = MainHUD->GetYogaInfo();
 	}
 
+	YogaInfo->SetCountdownText(TEXT(""));
+}
+
+void AScriptActor::SetCountdownTextBlock(const FString& Text)
+{
+	if (nullptr == YogaInfo)
+	{
+		YogaInfo = MainHUD->GetYogaInfo();
+	}
+
+	UE_LOG(LogTemp, Log, TEXT("Countdown Called : [%d]"), FCString::Atoi(*Text));
 	YogaInfo->SetCountdownText(Text);
 }
 
@@ -139,4 +187,3 @@ void AScriptActor::PlaySelectedAnimation(int32 AnimationIndex)
 	TObjectPtr<UWYGameInstance> WYGameInstance = CastChecked<UWYGameInstance>(GetGameInstance());
 	WYGameInstance->TCPSendMessage(JsonData);
 }
-

@@ -40,6 +40,35 @@ struct FTextEventArray
 	TArray<FTextEvent> InnerArray;
 };
 
+USTRUCT()
+struct FScoreEvent
+{
+	GENERATED_BODY()
+
+	FScoreEvent() :
+		bIsActive(false) {}
+
+	UPROPERTY(EditAnywhere)
+	float TriggerTime;
+
+	UPROPERTY(EditAnywhere)
+	float ClearTime;
+
+	UPROPERTY()
+	bool bIsActive;
+};
+
+USTRUCT()
+struct FScoreEventArray
+{
+	GENERATED_BODY()
+
+	FScoreEventArray() {}
+
+	UPROPERTY(EditAnywhere, Category = "Score Events")
+	TArray<FScoreEvent> InnerArray;
+};
+
 UCLASS()
 class WHATSYOGA_API AScriptActor : public AActor
 {
@@ -61,7 +90,8 @@ public:
 private:
 	void ClearYogaTextBlock();
 	void ShowYogaTextBlock(const FString& Text);
-	void SetCountdownText(const FString& Text);
+	void ClearCountdownTextBlock();
+	void SetCountdownTextBlock(const FString& Text);
 
 	void PlaySelectedAnimation(int32 AnimationIndex);
 
@@ -78,8 +108,15 @@ private:
 
 	UPROPERTY()
 	TArray<FTextEvent> TextEvents;
+
+	UPROPERTY(EditAnywhere, Category = "Score Events")
+	TArray<FScoreEventArray> ScoreEventArray;
+
+	UPROPERTY()
+	TArray<FScoreEvent> ScoreEvents;
 	
-	int32 LastProcessedEventIndex;
+	int32 LastProcessedTextEventIndex;
+	int32 LastProcessedScoreEventIndex;
 	int32 ContentIndex;
 
 private:
