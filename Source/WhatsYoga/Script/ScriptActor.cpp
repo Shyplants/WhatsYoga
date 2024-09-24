@@ -41,6 +41,7 @@ void AScriptActor::BeginPlay()
 	if (TextEventArray.IsValidIndex(ContentIndex))
 	{
 		TextEvents = TextEventArray[ContentIndex].InnerArray;
+		UE_LOG(LogTemp, Log, TEXT("ContentIndex : [%d]"), ContentIndex);
 	}
 	else
 	{
@@ -57,8 +58,6 @@ void AScriptActor::BeginPlay()
 	}
 	
 	PlaySelectedAnimation(ContentIndex);
-
-	ClearCountdownTextBlock();
 }
 
 void AScriptActor::Tick(float DeltaTime)
@@ -66,7 +65,13 @@ void AScriptActor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	AccumulatedTime += DeltaTime;
-	
+
+	check(ContentRunningTime != 0.0f);
+	if (AccumulatedTime > 0.5f)
+	{
+		YogaInfo->SetContentProgressBarPercent(AccumulatedTime / ContentRunningTime);
+	}
+
 	if (LastProcessedTextEventIndex + 1 < TextEvents.Num())
 	{
 		FTextEvent& Event = TextEvents[LastProcessedTextEventIndex + 1];
@@ -184,6 +189,8 @@ void AScriptActor::PlaySelectedAnimation(int32 AnimationIndex)
 
 	SequencePlayer->Play();
 
+	ContentRunningTime = static_cast<float>(SelectedSequence->GetMovieScene()->GetPlaybackRange().GetUpperBound().GetValue().Value / 24000.0f);
+	
 	TObjectPtr<UWYGameInstance> WYGameInstance = CastChecked<UWYGameInstance>(GetGameInstance());
 	WYGameInstance->TCPSendMessage(JsonData);
 }

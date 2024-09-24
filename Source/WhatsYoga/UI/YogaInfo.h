@@ -25,14 +25,19 @@ public:
 	void SetCountdownText(const FString& InText);
 
 	void SetCountdownVisible(bool bVisible);
+
+	void SetContentProgressBarPercent(float Percent);
 	
 protected:
 	UPROPERTY(meta = (BindWidget))
-	class URichTextBlock* YogaExplanationTextBlock;
+	TObjectPtr<class URichTextBlock> YogaExplanationTextBlock;
 
 	UPROPERTY(meta = (BindWidget))
-	class UGauge* WB_ComettailGauge;
+	TObjectPtr<class UGauge> WB_ComettailGauge;
 
 	UPROPERTY(meta = (BindWidget))
-	class UTextBlock* CountDownTextBlock;
+	TObjectPtr<class UTextBlock> CountDownTextBlock;
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<class UContentProgressBar> WB_ContentProgressBar;
 };

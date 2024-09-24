@@ -119,7 +119,13 @@ private:
 	int32 LastProcessedScoreEventIndex;
 	int32 ContentIndex;
 
+	UPROPERTY()
+	float ContentRunningTime;
+
 private:
+	UPROPERTY()
 	TObjectPtr<class AMainHUD> MainHUD;
+
+	UPROPERTY()
 	TObjectPtr<class UYogaInfo> YogaInfo;
 };
