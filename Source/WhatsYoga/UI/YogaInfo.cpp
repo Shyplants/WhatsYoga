@@ -1,6 +1,7 @@
 #include "YogaInfo.h"
 #include "Components/RichTextBlock.h"
 #include "Components/TextBlock.h"
+#include "Components/Image.h"
 #include "UObject/ObjectPtr.h"
 #include "Gauge.h"
 #include "ContentProgressBar.h"

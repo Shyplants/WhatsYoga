@@ -18,10 +18,22 @@ public:
 	UFUNCTION()
 	void SetPercent(float Percent);
 
-public:
+protected:
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class USlider> ContentSlider;
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class UProgressBar> ContentProgressBar;
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<class USliderBar> SliderBar;
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<class UImage> BackgroundImage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Materials")
+	TObjectPtr<class UMaterialInterface> Material;
+
+	UPROPERTY()
+	TObjectPtr<class UMaterialInstanceDynamic> DynamicMaterial;
 };
