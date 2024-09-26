@@ -16,7 +16,13 @@ public:
 	virtual void NativeConstruct() override;
 
 	UFUNCTION()
-	void SetYogaText(const FString& InText);
+	void SetYogaNameText(const FString& InText);
+
+	UFUNCTION()
+	void SetYogaEfficacyText(const FString& InText);
+
+	UFUNCTION()
+	void SetYogaExplanationText(const FString& InText);
 
 	UFUNCTION()
 	void SetGaugePercent(float Percent);
@@ -29,6 +35,12 @@ public:
 	void SetContentProgressBarPercent(float Percent);
 	
 protected:
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<class UTextBlock> YogaNameTextBlock;
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<class UTextBlock> YogaEfficacyTextBlock;
+
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class URichTextBlock> YogaExplanationTextBlock;
 

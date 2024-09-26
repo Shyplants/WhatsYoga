@@ -21,5 +21,9 @@ public:
 private:
 	UPROPERTY(meta = (BindWidget))
 	class UImage* ScreenImage;
+
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Webcam")
+	UMaterialInterface* RoundedMaterial;
 	
 };

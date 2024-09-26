@@ -13,7 +13,23 @@ void UYogaInfo::NativeConstruct()
 	SetCountdownVisible(false);
 }
 
-void UYogaInfo::SetYogaText(const FString& InText)
+void UYogaInfo::SetYogaNameText(const FString& InText)
+{
+	if (YogaNameTextBlock)
+	{
+		YogaNameTextBlock->SetText(FText::FromString(InText));
+	}
+}
+
+void UYogaInfo::SetYogaEfficacyText(const FString& InText)
+{
+	if (YogaEfficacyTextBlock)
+	{
+		YogaEfficacyTextBlock->SetText(FText::FromString(InText));
+	}
+}
+
+void UYogaInfo::SetYogaExplanationText(const FString& InText)
 {
 	if (YogaExplanationTextBlock)
 	{

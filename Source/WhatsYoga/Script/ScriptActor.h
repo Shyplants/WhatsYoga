@@ -84,12 +84,18 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
+	/*
 	UFUNCTION()
-	void SetContentIndex(int32 InContentInedx);
+	void SetContentIndex(int32 InContentInedx);*/
 
 private:
-	void ClearYogaTextBlock();
-	void ShowYogaTextBlock(const FString& Text);
+	void ClearYogaExplanationTextBlock();
+	void ShowYogaExplanationTextBlock(const FString& Text);
+
+	void ShowYogaEfficacyTextBlock(const FString& Text);
+
+	void ShowYogaNameTextBlock(const FString& Text);
+
 	void ClearCountdownTextBlock();
 	void SetCountdownTextBlock(const FString& Text);
 
@@ -104,10 +110,24 @@ private:
 	float AccumulatedTime;
 
 	UPROPERTY(EditAnywhere, Category = "Text Events")
-	TArray<FTextEventArray> TextEventArray;
+	TArray<FTextEventArray> YogaExplanationTextEventArray;
 
 	UPROPERTY()
-	TArray<FTextEvent> TextEvents;
+	TArray<FTextEvent> YogaExplanationTextEvents;
+
+
+	UPROPERTY(EditAnywhere, Category = "Text Events")
+	TArray<FTextEventArray> YogaEfficacyTextEventArray;
+
+	UPROPERTY()
+	TArray<FTextEvent> YogaEfficacyTextEvents;
+
+
+	UPROPERTY(EditAnywhere, Category = "Text Events")
+	TArray<FTextEventArray> YogaNameTextEventArray;
+
+	UPROPERTY()
+	TArray<FTextEvent> YogaNameTextEvents;
 
 	UPROPERTY(EditAnywhere, Category = "Score Events")
 	TArray<FScoreEventArray> ScoreEventArray;
@@ -115,7 +135,9 @@ private:
 	UPROPERTY()
 	TArray<FScoreEvent> ScoreEvents;
 	
-	int32 LastProcessedTextEventIndex;
+	int32 LastProcessedExplanationTextEventIndex;
+	int32 LastProcessedEfficacyTextEventIndex;
+	int32 LastProcessedNameTextEventIndex;
 	int32 LastProcessedScoreEventIndex;
 	int32 ContentIndex;
 

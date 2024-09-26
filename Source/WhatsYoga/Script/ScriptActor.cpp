@@ -19,7 +19,9 @@ AScriptActor::AScriptActor()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	AccumulatedTime = 0.0f;
-	LastProcessedTextEventIndex = -1;
+	LastProcessedExplanationTextEventIndex = -1;
+	LastProcessedEfficacyTextEventIndex = -1;
+	LastProcessedNameTextEventIndex = -1;
 	LastProcessedScoreEventIndex = -1;
 	ContentIndex = 0;
 }
@@ -38,14 +40,32 @@ void AScriptActor::BeginPlay()
 	TObjectPtr<UWYGameInstance> WYGameInstance = CastChecked<UWYGameInstance>(GetGameInstance());
 	ContentIndex = WYGameInstance->GetContentIndex();
 
-	if (TextEventArray.IsValidIndex(ContentIndex))
+	if (YogaExplanationTextEventArray.IsValidIndex(ContentIndex))
 	{
-		TextEvents = TextEventArray[ContentIndex].InnerArray;
-		UE_LOG(LogTemp, Log, TEXT("ContentIndex : [%d]"), ContentIndex);
+		YogaExplanationTextEvents = YogaExplanationTextEventArray[ContentIndex].InnerArray;
+		// UE_LOG(LogTemp, Log, TEXT("ContentIndex : [%d]"), ContentIndex);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("ContentIndex is unvalid"));
+		UE_LOG(LogTemp, Warning, TEXT("YogaExplanationTextEventArray ContentIndex is unvalid"));
+	}
+
+	if (YogaEfficacyTextEventArray.IsValidIndex(ContentIndex))
+	{
+		YogaEfficacyTextEvents = YogaEfficacyTextEventArray[ContentIndex].InnerArray;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("YogaEfficacyTextEventArray ContentIndex is unvalid"));
+	}
+
+	if (YogaNameTextEventArray.IsValidIndex(ContentIndex))
+	{
+		YogaNameTextEvents = YogaNameTextEventArray[ContentIndex].InnerArray;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("YogaNameTextEventArray ContentIndex is unvalid"));
 	}
 
 	if (ScoreEventArray.IsValidIndex(ContentIndex))
@@ -72,22 +92,23 @@ void AScriptActor::Tick(float DeltaTime)
 		YogaInfo->SetContentProgressBarPercent(AccumulatedTime / ContentRunningTime);
 	}
 
-	if (LastProcessedTextEventIndex + 1 < TextEvents.Num())
+	// YogaExplanation
+	if (LastProcessedExplanationTextEventIndex + 1 < YogaExplanationTextEvents.Num())
 	{
-		FTextEvent& Event = TextEvents[LastProcessedTextEventIndex + 1];
+		FTextEvent& Event = YogaExplanationTextEvents[LastProcessedExplanationTextEventIndex + 1];
 		if (!Event.bIsActive)
 		{
 			if (AccumulatedTime >= Event.TriggerTime)
 			{
 				Event.bIsActive = true;
-				ShowYogaTextBlock(Event.Text);
+				ShowYogaExplanationTextBlock(Event.Text);
 				// SetCountdownText(FString::Printf(TEXT("%d"), static_cast<int32>(Event.ClearTime - AccumulatedTime)));
 			}
 		}
 		else if (AccumulatedTime >= Event.ClearTime)
 		{
-			ClearYogaTextBlock();
-			LastProcessedTextEventIndex++;
+			ClearYogaExplanationTextBlock();
+			LastProcessedExplanationTextEventIndex++;
 		}
 		else
 		{
@@ -95,6 +116,53 @@ void AScriptActor::Tick(float DeltaTime)
 		}
 	}
 
+	// YogaEfficacy
+	if (LastProcessedEfficacyTextEventIndex + 1 < YogaEfficacyTextEvents.Num())
+	{
+		FTextEvent& Event = YogaEfficacyTextEvents[LastProcessedEfficacyTextEventIndex + 1];
+		if (!Event.bIsActive)
+		{
+			if (AccumulatedTime >= Event.TriggerTime)
+			{
+				Event.bIsActive = true;
+				ShowYogaEfficacyTextBlock(Event.Text);
+				// SetCountdownText(FString::Printf(TEXT("%d"), static_cast<int32>(Event.ClearTime - AccumulatedTime)));
+			}
+		}
+		else if (AccumulatedTime >= Event.ClearTime)
+		{
+			LastProcessedEfficacyTextEventIndex++;
+		}
+		else
+		{
+			// SetCountdownText(FString::Printf(TEXT("%d"), static_cast<int32>(Event.ClearTime - AccumulatedTime)));
+		}
+	}
+
+	// YogaName
+	if (LastProcessedNameTextEventIndex + 1 < YogaNameTextEvents.Num())
+	{
+		FTextEvent& Event = YogaNameTextEvents[LastProcessedNameTextEventIndex + 1];
+		if (!Event.bIsActive)
+		{
+			if (AccumulatedTime >= Event.TriggerTime)
+			{
+				Event.bIsActive = true;
+				ShowYogaNameTextBlock(Event.Text);
+				// SetCountdownText(FString::Printf(TEXT("%d"), static_cast<int32>(Event.ClearTime - AccumulatedTime)));
+			}
+		}
+		else if (AccumulatedTime >= Event.ClearTime)
+		{
+			LastProcessedNameTextEventIndex++;
+		}
+		else
+		{
+			// SetCountdownText(FString::Printf(TEXT("%d"), static_cast<int32>(Event.ClearTime - AccumulatedTime)));
+		}
+	}
+
+	// YogaScore
 	if (LastProcessedScoreEventIndex + 1 < ScoreEvents.Num())
 	{
 		FScoreEvent& Event = ScoreEvents[LastProcessedScoreEventIndex + 1];
@@ -120,34 +188,46 @@ void AScriptActor::Tick(float DeltaTime)
 	}
 }
 
-void AScriptActor::SetContentIndex(int32 InContentInedx)
-{
-	if (TextEventArray.IsValidIndex(InContentInedx))
-	{
-		ContentIndex = InContentInedx;
-	}
-}
-
-void AScriptActor::ClearYogaTextBlock()
+void AScriptActor::ClearYogaExplanationTextBlock()
 {
 	if (nullptr == YogaInfo)
 	{
 		YogaInfo = MainHUD->GetYogaInfo();
 	}
 
-	YogaInfo->SetYogaText(TEXT(""));
+	YogaInfo->SetYogaExplanationText(TEXT(""));
 	// YogaInfo->SetCountdownVisible(false);
 }
 
-void AScriptActor::ShowYogaTextBlock(const FString& Text)
+void AScriptActor::ShowYogaExplanationTextBlock(const FString& Text)
 {
 	if (nullptr == YogaInfo)
 	{
 		YogaInfo = MainHUD->GetYogaInfo();
 	}
 
-	YogaInfo->SetYogaText(Text);
+	YogaInfo->SetYogaExplanationText(Text);
 	// YogaInfo->SetCountdownVisible(true);
+}
+
+void AScriptActor::ShowYogaEfficacyTextBlock(const FString& Text)
+{
+	if (nullptr == YogaInfo)
+	{
+		YogaInfo = MainHUD->GetYogaInfo();
+	}
+
+	YogaInfo->SetYogaEfficacyText(Text);
+}
+
+void AScriptActor::ShowYogaNameTextBlock(const FString& Text)
+{
+	if (nullptr == YogaInfo)
+	{
+		YogaInfo = MainHUD->GetYogaInfo();
+	}
+
+	YogaInfo->SetYogaNameText(Text);
 }
 
 void AScriptActor::ClearCountdownTextBlock()
