@@ -14,6 +14,7 @@ class WHATSYOGA_API USliderBar : public UUserWidget
 
 public:
 	virtual void NativeConstruct() override;
+	virtual void NativeTick(const FGeometry& Geometry, float DeltaTime) override;
 
 	void UpdateImagePosition(float Percent);
 	
@@ -32,4 +33,10 @@ protected:
 
 	UPROPERTY()
 	float StartXPosition;
+
+	UPROPERTY(EditAnywhere)
+	TArray<TObjectPtr<class UTexture2D>> RunTextureArray;
+
+	int RunTextureIndex;
+	float RunTextureAnimationDuration;
 };

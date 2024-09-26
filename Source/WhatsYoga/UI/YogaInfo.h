@@ -33,6 +33,8 @@ public:
 	void SetCountdownVisible(bool bVisible);
 
 	void SetContentProgressBarPercent(float Percent);
+
+	void SetStarFillTexture(int32 index);
 	
 protected:
 	UPROPERTY(meta = (BindWidget))
@@ -52,4 +54,15 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class UContentProgressBar> WB_ContentProgressBar;
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<class UOverlay> StarOverlay;
+
+	TArray<TObjectPtr<class UImage>> StarImageArray;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<class UTexture2D> StarBlankTexture;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<class UTexture2D> StarFillTexture;
 };

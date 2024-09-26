@@ -88,6 +88,9 @@ public:
 	UFUNCTION()
 	void SetContentIndex(int32 InContentInedx);*/
 
+	UFUNCTION()
+	void OnYogaSequenceFinished();
+
 private:
 	void ClearYogaExplanationTextBlock();
 	void ShowYogaExplanationTextBlock(const FString& Text);

@@ -11,14 +11,36 @@ void USliderBar::NativeConstruct()
 	{
 		MovementRange = 480.0f;
 	}
+	
+	check(RunTextureArray.Num() > 0);
+	RunTextureIndex = 0;
 
 	if (SliderImage)
 	{
+		SliderImage->SetBrushFromTexture(RunTextureArray[RunTextureIndex]);
+
 		CanvasSlot = Cast<UCanvasPanelSlot>(SliderImage->Slot);
 		if (CanvasSlot)
 		{
 			StartXPosition = CanvasSlot->GetPosition().X;
 		}
+	}
+
+	RunTextureAnimationDuration = 0.0f;
+}
+
+void USliderBar::NativeTick(const FGeometry& Geometry, float DeltaTime)
+{
+	Super::NativeTick(Geometry, DeltaTime);
+
+	RunTextureAnimationDuration += DeltaTime;
+	if (RunTextureAnimationDuration > 0.5f)
+	{
+		RunTextureIndex++;
+		RunTextureIndex %= RunTextureArray.Num();
+		SliderImage->SetBrushFromTexture(RunTextureArray[RunTextureIndex]);
+
+		RunTextureAnimationDuration = 0.0f;
 	}
 }
 

@@ -29,10 +29,10 @@ void UContentProgressBar::SetPercent(float Percent)
 		ContentProgressBar->SetPercent(Percent);
 	}
 
-	if (ContentSlider)
+	/*if (ContentSlider)
 	{
 		ContentSlider->SetValue(Percent);
-	}
+	}*/
 
 	if (SliderBar)
 	{

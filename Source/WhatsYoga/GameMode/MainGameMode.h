@@ -20,6 +20,12 @@ public:
 	UFUNCTION()
 	void RegisterGstTexture(UTexture2D* InTexture);
 
+	UFUNCTION()
+	void LoadResultMap();
+
+	UFUNCTION()
+	void OpenResultMap();
+
 public:
 	UFUNCTION()
 	void SetGaugePercent(float Percent);

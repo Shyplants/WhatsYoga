@@ -1,6 +1,7 @@
 #include "MainGameMode.h"
 #include "GameInstance/WYGameInstance.h"
 #include "HUD/MainHUD.h"
+#include "Kismet/GameplayStatics.h"
 
 AMainGameMode::AMainGameMode()
 {
@@ -26,6 +27,17 @@ void AMainGameMode::RegisterGstTexture(UTexture2D* InTexture)
 	{
 		OnGstTextureCreated.Execute(InTexture);
 	}
+}
+
+void AMainGameMode::LoadResultMap()
+{
+	FTimerHandle OpenYogaMapTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(OpenYogaMapTimerHandle, this, &AMainGameMode::OpenResultMap, 0.5f, false);
+}
+
+void AMainGameMode::OpenResultMap()
+{
+	UGameplayStatics::OpenLevel(GetWorld(), FName("ResultMap"));
 }
 
 void AMainGameMode::SetGaugePercent(float Percent)

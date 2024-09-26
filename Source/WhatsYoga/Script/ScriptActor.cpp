@@ -4,6 +4,7 @@
 #include "UI/YogaInfo.h"
 #include "Helper/JsonHelper.h"
 #include "GameInstance/WYGameInstance.h"
+#include "GameMode/MainGameMode.h"
 #include "LevelSequence.h"
 #include "LevelSequenceActor.h"
 #include "LevelSequencePlayer.h"
@@ -149,7 +150,6 @@ void AScriptActor::Tick(float DeltaTime)
 			{
 				Event.bIsActive = true;
 				ShowYogaNameTextBlock(Event.Text);
-				// SetCountdownText(FString::Printf(TEXT("%d"), static_cast<int32>(Event.ClearTime - AccumulatedTime)));
 			}
 		}
 		else if (AccumulatedTime >= Event.ClearTime)
@@ -178,6 +178,7 @@ void AScriptActor::Tick(float DeltaTime)
 		else if (AccumulatedTime >= Event.ClearTime)
 		{
 			YogaInfo->SetCountdownVisible(false);
+			YogaInfo->SetStarFillTexture(LastProcessedScoreEventIndex + 1);
 			LastProcessedScoreEventIndex++;
 		}
 		else
@@ -186,6 +187,14 @@ void AScriptActor::Tick(float DeltaTime)
 		}
 		
 	}
+}
+
+void AScriptActor::OnYogaSequenceFinished()
+{
+	// UE_LOG(LogTemp, Log, TEXT("OnYogaSequenceFinished called"));
+
+	AMainGameMode* MainGameMode = CastChecked<AMainGameMode>(GetWorld()->GetAuthGameMode());
+	MainGameMode->LoadResultMap();
 }
 
 void AScriptActor::ClearYogaExplanationTextBlock()
@@ -268,6 +277,7 @@ void AScriptActor::PlaySelectedAnimation(int32 AnimationIndex)
 	);
 
 	SequencePlayer->Play();
+	SequencePlayer->OnFinished.AddDynamic(this, &AScriptActor::OnYogaSequenceFinished);
 
 	ContentRunningTime = static_cast<float>(SelectedSequence->GetMovieScene()->GetPlaybackRange().GetUpperBound().GetValue().Value / 24000.0f);
 	

@@ -19,8 +19,8 @@ public:
 	void SetPercent(float Percent);
 
 protected:
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<class USlider> ContentSlider;
+	/*UPROPERTY(meta = (BindWidget))
+	TObjectPtr<class USlider> ContentSlider;*/
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class UProgressBar> ContentProgressBar;
