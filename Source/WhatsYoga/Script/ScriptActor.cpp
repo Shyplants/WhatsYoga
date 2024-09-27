@@ -5,6 +5,8 @@
 #include "Helper/JsonHelper.h"
 #include "GameInstance/WYGameInstance.h"
 #include "GameMode/MainGameMode.h"
+#include "Audio/InteractiveAudioManager.h"
+#include "Sound/SoundCue.h"
 #include "LevelSequence.h"
 #include "LevelSequenceActor.h"
 #include "LevelSequencePlayer.h"
@@ -77,6 +79,8 @@ void AScriptActor::BeginPlay()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("ContentIndex is unvalid"));
 	}
+
+	InteractiveAudioManager = AInteractiveAudioManager::GetInstance(GetWorld());
 	
 	PlaySelectedAnimation(ContentIndex);
 }
@@ -104,6 +108,12 @@ void AScriptActor::Tick(float DeltaTime)
 				Event.bIsActive = true;
 				ShowYogaExplanationTextBlock(Event.Text);
 				// SetCountdownText(FString::Printf(TEXT("%d"), static_cast<int32>(Event.ClearTime - AccumulatedTime)));
+
+				if (InteractiveAudioManager && YogaExplanationSoundArray.IsValidIndex(LastProcessedExplanationTextEventIndex + 1))
+				{
+					FAudioData AudioData(YogaExplanationSoundArray[LastProcessedExplanationTextEventIndex + 1], EAudioType::SFX, 0, true);
+					InteractiveAudioManager->PlayAudio(AudioData);
+				}
 			}
 		}
 		else if (AccumulatedTime >= Event.ClearTime)
