@@ -18,6 +18,11 @@ void UWYGameInstance::Init()
 {
 	Super::Init();
 
+	if (GEngine)
+	{
+		GEngine->SetMaxFPS(60.0f);
+	}
+
 	const FString SavedDir = FPaths::Combine(FPlatformMisc::ProjectDir(), TEXT("Saved"));
 	// Config File Parse
 	{
