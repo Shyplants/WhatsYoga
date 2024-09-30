@@ -86,6 +86,10 @@ void UWYGameInstance::HandleReceivedTCPMessage(FString Message)
 				if (JsonObject->TryGetNumberField(TEXT("score"), floatValue))
 				{
 					SetGaugePercent(floatValue);
+					if (bIsEvaluating && !bIsHighScoreAchieved && floatValue >= 60.0f)
+					{
+						bIsHighScoreAchieved = true;
+					}
 				}
 			}
 
@@ -141,4 +145,29 @@ void UWYGameInstance::SetContentIndex()
 			break;
 		}
 	}
+}
+
+float UWYGameInstance::IsHighScoreAchieved()
+{
+	return bIsHighScoreAchieved;
+}
+
+void UWYGameInstance::ClearHighScoreAchieved()
+{
+	bIsHighScoreAchieved = false;
+}
+
+void UWYGameInstance::SetIsEvaluating(bool IsEvaluating)
+{
+	bIsEvaluating = IsEvaluating;
+}
+
+void UWYGameInstance::SetStarState(int32 InStarState)
+{
+	StarState = InStarState;
+}
+
+int32 UWYGameInstance::GetStartState()
+{
+	return StarState;
 }

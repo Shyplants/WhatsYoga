@@ -154,10 +154,16 @@ private:
 	UPROPERTY()
 	TObjectPtr<class UYogaInfo> YogaInfo;
 
+	UPROPERTY()
+	TObjectPtr<class UWYGameInstance> WYGameInstance;
+
 // Audio Section
 private:
 	UPROPERTY(EditAnywhere, Category = "Audio")
 	TArray<TObjectPtr<class USoundCue>> YogaExplanationSoundArray;
+
+	UPROPERTY(EditAnywhere, Category = "Audio")
+	TObjectPtr<class USoundCue> YogaBackgroundSound;
 
 	UPROPERTY()
 	TObjectPtr<class AInteractiveAudioManager> InteractiveAudioManager;

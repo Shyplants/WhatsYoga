@@ -62,4 +62,28 @@ private:
 	FString PlayerName;
 	FString ContentName;
 	int32 ContentIndex;
+
+// Score Section
+public:
+	float IsHighScoreAchieved();
+
+	void ClearHighScoreAchieved();
+
+	void SetIsEvaluating(bool IsEvaluating);
+
+	void SetStarState(int32 InStarState);
+	int32 GetStartState();
+
+private:
+	UPROPERTY()
+	float CurrentScore;
+
+	UPROPERTY()
+	bool bIsHighScoreAchieved;
+
+	UPROPERTY()
+	bool bIsEvaluating;
+
+	UPROPERTY()
+	int32 StarState;
 };

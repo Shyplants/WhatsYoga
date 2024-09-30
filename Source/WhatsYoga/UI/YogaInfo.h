@@ -35,6 +35,8 @@ public:
 	void SetContentProgressBarPercent(float Percent);
 
 	void SetStarFillTexture(int32 index);
+
+	int32 GetStarState();
 	
 protected:
 	UPROPERTY(meta = (BindWidget))
@@ -65,4 +67,8 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<class UTexture2D> StarFillTexture;
+
+private:
+	UPROPERTY()
+	int32 StarState;
 };

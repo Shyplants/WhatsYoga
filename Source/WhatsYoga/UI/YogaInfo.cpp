@@ -115,5 +115,12 @@ void UYogaInfo::SetStarFillTexture(int32 index)
 			StarImageArray[index]->SetBrushFromTexture(StarFillTexture);
 			// StarImageArray[i]->SetBrushTintColor(StarColor);
 		}
+
+		StarState |= (1 << index);
 	}
+}
+
+int32 UYogaInfo::GetStarState()
+{
+	return StarState;
 }

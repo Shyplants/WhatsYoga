@@ -14,6 +14,6 @@ void AResultGameMode::BeginPlay()
 	if (PlayerController)
 	{
 		ResultHUD = CastChecked<AResultHUD>(PlayerController->GetHUD());
-		ResultHUD->AddResultWidget();
+		ResultHUD->AddYogaResultWidget();
 	}
 }

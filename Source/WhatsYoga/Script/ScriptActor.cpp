@@ -40,13 +40,12 @@ void AScriptActor::BeginPlay()
 	}
 
 
-	TObjectPtr<UWYGameInstance> WYGameInstance = CastChecked<UWYGameInstance>(GetGameInstance());
+	WYGameInstance = CastChecked<UWYGameInstance>(GetGameInstance());
 	ContentIndex = WYGameInstance->GetContentIndex();
 
 	if (YogaExplanationTextEventArray.IsValidIndex(ContentIndex))
 	{
 		YogaExplanationTextEvents = YogaExplanationTextEventArray[ContentIndex].InnerArray;
-		// UE_LOG(LogTemp, Log, TEXT("ContentIndex : [%d]"), ContentIndex);
 	}
 	else
 	{
@@ -81,6 +80,11 @@ void AScriptActor::BeginPlay()
 	}
 
 	InteractiveAudioManager = AInteractiveAudioManager::GetInstance(GetWorld());
+	if (InteractiveAudioManager && YogaBackgroundSound)
+	{
+		FAudioData AudioData(YogaBackgroundSound, EAudioType::BGM, 0, true);
+		InteractiveAudioManager->PlayAudio(AudioData);
+	}
 	
 	PlaySelectedAnimation(ContentIndex);
 }
@@ -107,7 +111,6 @@ void AScriptActor::Tick(float DeltaTime)
 			{
 				Event.bIsActive = true;
 				ShowYogaExplanationTextBlock(Event.Text);
-				// SetCountdownText(FString::Printf(TEXT("%d"), static_cast<int32>(Event.ClearTime - AccumulatedTime)));
 
 				if (InteractiveAudioManager && YogaExplanationSoundArray.IsValidIndex(LastProcessedExplanationTextEventIndex + 1))
 				{
@@ -137,7 +140,6 @@ void AScriptActor::Tick(float DeltaTime)
 			{
 				Event.bIsActive = true;
 				ShowYogaEfficacyTextBlock(Event.Text);
-				// SetCountdownText(FString::Printf(TEXT("%d"), static_cast<int32>(Event.ClearTime - AccumulatedTime)));
 			}
 		}
 		else if (AccumulatedTime >= Event.ClearTime)
@@ -183,16 +185,30 @@ void AScriptActor::Tick(float DeltaTime)
 				Event.bIsActive = true;
 				YogaInfo->SetCountdownVisible(true);
 				SetCountdownTextBlock(FString::Printf(TEXT("%d"), static_cast<int32>(Event.ClearTime - AccumulatedTime)));
+
+				WYGameInstance->SetIsEvaluating(true);
 			}
 		}
 		else if (AccumulatedTime >= Event.ClearTime)
 		{
 			YogaInfo->SetCountdownVisible(false);
-			YogaInfo->SetStarFillTexture(LastProcessedScoreEventIndex + 1);
+
+			if (WYGameInstance->IsHighScoreAchieved())
+			{
+				YogaInfo->SetStarFillTexture(LastProcessedScoreEventIndex + 1);
+			}
+			WYGameInstance->ClearHighScoreAchieved();
+			WYGameInstance->SetIsEvaluating(false);
+
 			LastProcessedScoreEventIndex++;
 		}
 		else
 		{
+			/*if (!Event.bIsHighScoreAchieved && WYGameInstance->GetCurrentScore() >= 60.0f)
+			{
+				Event.bIsHighScoreAchieved = true;
+			}*/
+
 			SetCountdownTextBlock(FString::Printf(TEXT("%d"), static_cast<int32>(Event.ClearTime - AccumulatedTime)));
 		}
 		
@@ -202,6 +218,8 @@ void AScriptActor::Tick(float DeltaTime)
 void AScriptActor::OnYogaSequenceFinished()
 {
 	// UE_LOG(LogTemp, Log, TEXT("OnYogaSequenceFinished called"));
+
+	WYGameInstance->SetStarState(YogaInfo->GetStarState());
 
 	AMainGameMode* MainGameMode = CastChecked<AMainGameMode>(GetWorld()->GetAuthGameMode());
 	MainGameMode->LoadResultMap();
@@ -291,6 +309,6 @@ void AScriptActor::PlaySelectedAnimation(int32 AnimationIndex)
 
 	ContentRunningTime = static_cast<float>(SelectedSequence->GetMovieScene()->GetPlaybackRange().GetUpperBound().GetValue().Value / 24000.0f);
 	
-	TObjectPtr<UWYGameInstance> WYGameInstance = CastChecked<UWYGameInstance>(GetGameInstance());
+	// TObjectPtr<UWYGameInstance> WYGameInstance = CastChecked<UWYGameInstance>(GetGameInstance());
 	WYGameInstance->TCPSendMessage(JsonData);
 }

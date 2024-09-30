@@ -19,5 +19,12 @@ public:
 	UPROPERTY()
 	TObjectPtr<class UResult> ResultWidget;
 
+	UPROPERTY(EditAnywhere, Category = "WidgetClass")
+	TSubclassOf<class UUserWidget> YogaResultWidgetClass;
+
+	UPROPERTY()
+	TObjectPtr<class UYogaResult> YogaResultWidget;
+
 	void AddResultWidget();
+	void AddYogaResultWidget();
 };
