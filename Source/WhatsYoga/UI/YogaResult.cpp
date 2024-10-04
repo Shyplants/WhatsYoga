@@ -9,24 +9,25 @@ void UYogaResult::NativeConstruct()
 {
 	TObjectPtr<UWYGameInstance> WYGameInstance = CastChecked<UWYGameInstance>(GetGameInstance());
 	int32 StarState = WYGameInstance->GetStartState();
+	int32 ScoreCount = WYGameInstance->GetScoreCount();
 
-	for (int32 i = 0; i < 10; ++i)
+	for (int32 i = 0; i < ScoreCount; ++i)
 	{
 		StarCount += ((StarState >> i) & 1);
 	}
 
 	check(FontColorArray.Num() >= 4);
 	FLinearColor CurrentColor = FontColorArray[0];
-	if (StarCount == 10)
+	if (StarCount == ScoreCount)
 	{
 		SetYogaPoseEvaluationTextBlock(TEXT("PERFECT!!!"), FontColorArray[0]);
 	}
-	else if (StarCount > 6)
+	else if (StarCount > ScoreCount/3*2)
 	{
 		SetYogaPoseEvaluationTextBlock(TEXT("AWESOME!!"), FontColorArray[1]);
 		CurrentColor = FontColorArray[1];
 	}
-	else if (StarCount > 3)
+	else if (StarCount > ScoreCount/3)
 	{
 		SetYogaPoseEvaluationTextBlock(TEXT("GREAT!"), FontColorArray[2]);
 		CurrentColor = FontColorArray[2];
@@ -38,7 +39,7 @@ void UYogaResult::NativeConstruct()
 	}
 
 	StarImageArray.Empty();
-	for (int32 i = 0; i < 10; ++i)
+	for (int32 i = 0; i < ScoreCount; ++i)
 	{
 		UImage* StarImage = NewObject<UImage>(this, UImage::StaticClass());
 		if (StarImage)
@@ -64,7 +65,8 @@ void UYogaResult::NativeConstruct()
 			StarImageArray.Add(StarImage);
 
 			FWidgetTransform transform;
-			transform.Translation = FVector2D(-234.0f + 52.0f * i, 0.0f);
+			float offset = -(ScoreCount / 2 - 0.5f) * 52.0f;
+			transform.Translation = FVector2D(offset + 52.0f * i, 0.0f);
 			StarImageArray[i]->SetRenderTransform(transform);
 		}
 	}

@@ -11,7 +11,7 @@
 
 UWYGameInstance::UWYGameInstance()
 {
-	ContentIndex = 0;
+	ContentIndex = 2;
 }
 
 void UWYGameInstance::Init()
@@ -136,12 +136,18 @@ void UWYGameInstance::SetGaugePercent(float Percent)
 void UWYGameInstance::SetContentIndex()
 {
 	TArray<FString> ContentNames = { TEXT("upper_body") , TEXT("lower_body"), TEXT("body") };
+	TArray<int32> ScoreCounts = { 10, 10, 8 };
 
 	for (int32 i = 0; i < ContentNames.Num(); ++i)
 	{
+		check(ContentNames.IsValidIndex(i));
+
 		if (!ContentName.Compare(ContentNames[i]))
 		{
 			ContentIndex = i;
+
+			check(ScoreCounts.IsValidIndex(i));
+			SetScoreCount(ScoreCounts[i]);
 			break;
 		}
 	}

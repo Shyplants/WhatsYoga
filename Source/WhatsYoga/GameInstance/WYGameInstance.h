@@ -52,16 +52,22 @@ public:
 	FORCEINLINE void SetPlayerName(const FString& InPlayerName) { PlayerName = InPlayerName; OnNameReceived.ExecuteIfBound(InPlayerName); }
 	FORCEINLINE FString GetPlayerName() const { return PlayerName; }
 
+// Content Section
+public:
 	void SetContentIndex();
 	FORCEINLINE int32 GetContentIndex() const { return ContentIndex; }
 
 	FORCEINLINE void SetContentName(const FString& InContentName) { ContentName = InContentName; }
 	FORCEINLINE FString GetContentName() const { return ContentName; }
 
+	FORCEINLINE void SetScoreCount(const int32 InScoreCount) { ScoreCount = InScoreCount; }
+	FORCEINLINE int32 GetScoreCount() const { return ScoreCount; }
+
 private:
 	FString PlayerName;
 	FString ContentName;
 	int32 ContentIndex;
+	int32 ScoreCount;
 
 // Score Section
 public:

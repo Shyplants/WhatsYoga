@@ -1,4 +1,5 @@
 #include "YogaInfo.h"
+#include "GameInstance/WYGameInstance.h"
 #include "Components/RichTextBlock.h"
 #include "Components/TextBlock.h"
 #include "Components/Image.h"
@@ -12,11 +13,15 @@ void UYogaInfo::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	WYGameInstance = CastChecked<UWYGameInstance>(GetGameInstance());
+
 	SetCountdownVisible(false);
 
 	StarImageArray.Empty();
+	ScoreCount = WYGameInstance->GetScoreCount();
+
 	FLinearColor StarColor = FLinearColor(FColor::FromHex(TEXT("EE7D26FF")));
-	for (int32 i = 0; i < 10; ++i)
+	for (int32 i = 0; i < ScoreCount; ++i)
 	{
 		UImage* StarImage = NewObject<UImage>(this, UImage::StaticClass());
 
@@ -39,7 +44,8 @@ void UYogaInfo::NativeConstruct()
 			StarImageArray.Add(StarImage);
 
 			FWidgetTransform transform;
-			transform.Translation = FVector2D(-189.0f + 42.0f * i, 0.0f);
+			float offset = -(ScoreCount / 2 - 0.5f) * 42.0f;
+			transform.Translation = FVector2D(offset + 42.0f * i, 0.0f);
 			StarImageArray[i]->SetRenderTransform(transform);
 		}
 	}

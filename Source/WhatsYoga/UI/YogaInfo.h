@@ -68,7 +68,13 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<class UTexture2D> StarFillTexture;
 
+	UPROPERTY()
+	TObjectPtr<class UWYGameInstance> WYGameInstance;
+
 private:
 	UPROPERTY()
 	int32 StarState;
+
+	UPROPERTY()
+	int32 ScoreCount;
 };
