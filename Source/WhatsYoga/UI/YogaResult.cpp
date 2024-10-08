@@ -1,4 +1,4 @@
-#include "YogaResult.h"
+﻿#include "YogaResult.h"
 #include "GameInstance/WYGameInstance.h"
 #include "Components/TextBlock.h"
 #include "Components/Image.h"
@@ -70,6 +70,30 @@ void UYogaResult::NativeConstruct()
 			StarImageArray[i]->SetRenderTransform(transform);
 		}
 	}
+
+	int32 ContentIndex = WYGameInstance->GetContentIndex();
+	if (ContentIndex == 0) 
+	{
+
+	}
+
+	else if (ContentIndex == 1) 
+	{
+
+	}
+
+	else if (ContentIndex == 2) 
+	{
+		SetSelectedPoseTextBlock(TEXT("선택부위 : 전신"), FLinearColor(0.049707, 0.049707, 0.049707));
+
+		FString MovementsText;
+		MovementsText += TEXT("비라바드라아사나2\n");
+		MovementsText += TEXT("우티타 트리코나아사나\n");
+		MovementsText += TEXT("우티타 파르스바코나아사나\n");
+		MovementsText += TEXT("비파리타 비라바드라아사나2");
+
+		SetMovementsTextBlock(MovementsText, FLinearColor(0.138432, 0.138432, 0.138432));
+	}
 }
 
 void UYogaResult::SetYogaPoseEvaluationTextBlock(const FString& InText, const FLinearColor& InColor)
@@ -78,6 +102,24 @@ void UYogaResult::SetYogaPoseEvaluationTextBlock(const FString& InText, const FL
 	{
 		YogaPoseEvaluationTextBlock->SetText(FText::FromString(InText));
 		YogaPoseEvaluationTextBlock->SetColorAndOpacity(InColor);
+	}
+}
+
+void UYogaResult::SetSelectedPoseTextBlock(const FString& InText, const FLinearColor& InColor)
+{
+	if (SelectedPoseTextBlock)
+	{
+		SelectedPoseTextBlock->SetText(FText::FromString(InText));
+		SelectedPoseTextBlock->SetColorAndOpacity(InColor);
+	}
+}
+
+void UYogaResult::SetMovementsTextBlock(const FString& InText, const FLinearColor& InColor)
+{
+	if (MovementsTextBlock)
+	{
+		MovementsTextBlock->SetText(FText::FromString(InText));
+		MovementsTextBlock->SetColorAndOpacity(InColor);
 	}
 }
 

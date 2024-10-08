@@ -18,11 +18,22 @@ public:
 	UFUNCTION()
 	void SetYogaPoseEvaluationTextBlock(const FString& InText, const FLinearColor& InColor);
 
+	UFUNCTION()
+	void SetSelectedPoseTextBlock(const FString& InText, const FLinearColor& InColor);
+
+	void SetMovementsTextBlock(const FString& InText, const FLinearColor& InColor);
+
 	void SetStarFillTexture(int32 index);
 
 protected:
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class UTextBlock> YogaPoseEvaluationTextBlock;
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<class UTextBlock> SelectedPoseTextBlock;
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<class UTextBlock> MovementsTextBlock;
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class UOverlay> StarOverlay;
